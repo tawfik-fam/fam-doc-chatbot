@@ -461,10 +461,10 @@ if uploaded_file is not None and prompt is None and "upload" in st.session_state
 # print(uploaded_file._file_urls.upload_url)
 # print(uploaded_file.name)
 # Now check for prompt
-if "upload" in st.session_state and st.session_state.upload == "close" and uploaded_file:
-    resp = asyncio.run(question_suggestion())
-    for i in resp["questions"]:
-        st.sidebar.button(label=i, on_click=generate_llm, args=[i])
+# if "upload" in st.session_state and st.session_state.upload == "close" and uploaded_file:
+#     resp = asyncio.run(question_suggestion())
+#     for i in resp["questions"]:
+#         st.sidebar.button(label=i, on_click=generate_llm, args=[i])
 
 if prompt:
     # Generate suggestion question only if no file uploaded or file is closed
