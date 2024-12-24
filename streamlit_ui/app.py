@@ -1,15 +1,15 @@
 import re
 import asyncio
-import oracledb
-import pdfplumber
+# import oracledb
+# import pdfplumber
 import streamlit as st
 
-from tqdm import tqdm
-from docx import Document 
-from docx.table import Table
-from docx.oxml.table import CT_Tbl
-from docx.text.paragraph import Paragraph
-from docx.oxml.text.paragraph import CT_P
+# from tqdm import tqdm
+# from docx import Document 
+# from docx.table import Table
+# from docx.oxml.table import CT_Tbl
+# from docx.text.paragraph import Paragraph
+# from docx.oxml.text.paragraph import CT_P
 from llama_index.core.llms import ChatMessage
 from chatbot_helper import upload_file,chat,question_suggestion
 
@@ -37,66 +37,66 @@ def upload_file_api(file):
     print("resp ", resp)
     msg.toast(resp)
 
-def extract_pdf(file):
-    """Extracts paragraphs, headings, and tables from a PDF file and returns a list of dictionaries.
+# def extract_pdf(file):
+#     """Extracts paragraphs, headings, and tables from a PDF file and returns a list of dictionaries.
 
-    Args:
-        file_path (str): The path to the PDF file.
+#     Args:
+#         file_path (str): The path to the PDF file.
 
-    Returns:
-        list: A list of dictionaries, each containing 'heading', 'paragraphs', and 'tables' keys.
-    """
+#     Returns:
+#         list: A list of dictionaries, each containing 'heading', 'paragraphs', and 'tables' keys.
+#     """
 
-    data = []
-    current_heading = None
-    current_paragraph = []
-    current_tables = []
+#     data = []
+#     current_heading = None
+#     current_paragraph = []
+#     current_tables = []
     
-    with pdfplumber.open(file) as pdf:
-        for page in pdf.pages:
-            # for tb in page.extract_tables():
-            #     print("table")
-            #     print(tb)
-            for obj in page.filter(lambda obj: obj["object_type"] == "char").extract_text_lines():
-                for char_info in obj['chars']:
-                    if char_info['size'] >= 13:
-                    # New heading encountered, store previous paragraph and tables
-                        if current_paragraph:
-                            data.append( {
-                                "heading":current_heading,
-                                "paragraphs": " ".join(current_paragraph),
-                                "table": current_tables
-                            })
-                        current_paragraph = []
-                        current_tables = []
-                        current_heading = obj["text"]
+#     with pdfplumber.open(file) as pdf:
+#         for page in pdf.pages:
+#             # for tb in page.extract_tables():
+#             #     print("table")
+#             #     print(tb)
+#             for obj in page.filter(lambda obj: obj["object_type"] == "char").extract_text_lines():
+#                 for char_info in obj['chars']:
+#                     if char_info['size'] >= 13:
+#                     # New heading encountered, store previous paragraph and tables
+#                         if current_paragraph:
+#                             data.append( {
+#                                 "heading":current_heading,
+#                                 "paragraphs": " ".join(current_paragraph),
+#                                 "table": current_tables
+#                             })
+#                         current_paragraph = []
+#                         current_tables = []
+#                         current_heading = obj["text"]
             
-                current_paragraph.append(obj["text"])
+#                 current_paragraph.append(obj["text"])
             
-            # if 
-            current_tables = page.extract_tables()
+#             # if 
+#             current_tables = page.extract_tables()
 
-            # Check for last page handling (append final paragraph and tables)
-            if current_paragraph and (current_heading or current_tables):
-                data.append ({
-                    "heading":current_heading,
-                    "paragraphs": " ".join(current_paragraph),
-                    "table": current_tables
-                })
-                current_paragraph = []
-                current_tables = []
+#             # Check for last page handling (append final paragraph and tables)
+#             if current_paragraph and (current_heading or current_tables):
+#                 data.append ({
+#                     "heading":current_heading,
+#                     "paragraphs": " ".join(current_paragraph),
+#                     "table": current_tables
+#                 })
+#                 current_paragraph = []
+#                 current_tables = []
                 
-    # print(data["Invoicing of Deals (Sale and Lease)"])
+#     # print(data["Invoicing of Deals (Sale and Lease)"])
     
-    # print(data[6])
+#     # print(data[6])
     
-    result = {
-        "file_name":file.name,
-        "data":data
-    }
+#     result = {
+#         "file_name":file.name,
+#         "data":data
+#     }
     
-    st.sidebar.success("document splitted")
-    return result
+#     st.sidebar.success("document splitted")
+#     return result
      
     # with pdfplumber.open(file) as pdf:
     #     # page.filter(lambda obj: (obj["object_type"] == "char" and obj["size"] >= 12))
@@ -174,7 +174,7 @@ def extract_pdf(file):
     # }
     # return result
 
-def extract_paragraph_docx(file):
+# def extract_paragraph_docx(file):
     # doc = Document(file)
     # contents = []
     # # current_page = 1
@@ -294,109 +294,109 @@ def extract_paragraph_docx(file):
     
     # return result
     
-    doc = Document(file)
-    contents = []
-    paras = []
-    data = {
-        "heading": "",
-        "paragraphs": [],
-        "table": []
-    }
-    header = ""
+#     doc = Document(file)
+#     contents = []
+#     paras = []
+#     data = {
+#         "heading": "",
+#         "paragraphs": [],
+#         "table": []
+#     }
+#     header = ""
     
-    for element in tqdm(doc.element.body):
-        if isinstance(element, CT_Tbl):
-            table = Table(element, doc)
-            rows = []
-            for i, row in enumerate(table.rows):
-                text = (cell.text for cell in row.cells)
-                rows.append(tuple(text))
-            data["table"] = rows  # Store table data
-            continue
+#     for element in tqdm(doc.element.body):
+#         if isinstance(element, CT_Tbl):
+#             table = Table(element, doc)
+#             rows = []
+#             for i, row in enumerate(table.rows):
+#                 text = (cell.text for cell in row.cells)
+#                 rows.append(tuple(text))
+#             data["table"] = rows  # Store table data
+#             continue
         
-        if isinstance(element, CT_P):
-            paragraph = Paragraph(element, doc)
-            if paragraph.style != None and paragraph.style.name.startswith('Heading') and paragraph.style.name in ['Heading 1','Heading 2', 'Heading 3']:
-                header_temp = paragraph.text.strip()
-                if header_temp:  # Check if header is not empty
-                    # Append data only if it has content to avoid duplicates
-                    if data["heading"] and (data["paragraphs"] or data["table"]):
-                        contents.append(data)
+#         if isinstance(element, CT_P):
+#             paragraph = Paragraph(element, doc)
+#             if paragraph.style != None and paragraph.style.name.startswith('Heading') and paragraph.style.name in ['Heading 1','Heading 2', 'Heading 3']:
+#                 header_temp = paragraph.text.strip()
+#                 if header_temp:  # Check if header is not empty
+#                     # Append data only if it has content to avoid duplicates
+#                     if data["heading"] and (data["paragraphs"] or data["table"]):
+#                         contents.append(data)
                     
-                    # Reset for the new section
-                    header = header_temp
-                    data = {
-                        "heading": header,
-                        "paragraphs": [],
-                        "table": []
-                    }
-                    paras = []
-            elif paragraph.text.strip() and paragraph.text != header:  # Avoid empty and header texts
-                paras.append(paragraph.text.strip())
+#                     # Reset for the new section
+#                     header = header_temp
+#                     data = {
+#                         "heading": header,
+#                         "paragraphs": [],
+#                         "table": []
+#                     }
+#                     paras = []
+#             elif paragraph.text.strip() and paragraph.text != header:  # Avoid empty and header texts
+#                 paras.append(paragraph.text.strip())
 
-            data["paragraphs"] = paras  # Update paragraphs in data
+#             data["paragraphs"] = paras  # Update paragraphs in data
 
-    # Append the last section if it has content
-    if data["heading"] and (data["paragraphs"] or data["table"]):
-        contents.append(data)
+#     # Append the last section if it has content
+#     if data["heading"] and (data["paragraphs"] or data["table"]):
+#         contents.append(data)
     
-    # for ll in contents:
-    #     print("00"*40)
-    #     print(ll)
-    formatted = []
-    for j in contents:
-        if len(j["paragraphs"]) > 10:
-            for i in range(0, len(j["paragraphs"]), 10):
-                splitted = j["paragraphs"][i:i+10]
-                formatted.append({
-                    "heading":j["heading"],
-                    "paragraphs":splitted,
-                    "table":j["table"]
-                })
-        else:
-            formatted.append(j)
+#     # for ll in contents:
+#     #     print("00"*40)
+#     #     print(ll)
+#     formatted = []
+#     for j in contents:
+#         if len(j["paragraphs"]) > 10:
+#             for i in range(0, len(j["paragraphs"]), 10):
+#                 splitted = j["paragraphs"][i:i+10]
+#                 formatted.append({
+#                     "heading":j["heading"],
+#                     "paragraphs":splitted,
+#                     "table":j["table"]
+#                 })
+#         else:
+#             formatted.append(j)
                     
-    result = {
-        "file_name":file.name,
-        "data":formatted
-    }
+#     result = {
+#         "file_name":file.name,
+#         "data":formatted
+#     }
     
-    print(result["file_name"])
-    for k in result["data"]:
-        print("-"*40)
-        print(k)
+#     print(result["file_name"])
+#     for k in result["data"]:
+#         print("-"*40)
+#         print(k)
     
-    st.sidebar.success("document splitted")
-    return result
+#     st.sidebar.success("document splitted")
+#     return result
 
-def insert_paragraph_to_oracledb(contents):
-    connection = oracledb.connect(user="ai", password="testtest",dsn="91.75.21.131:9522/FREEPDB1")
-    cursor = connection.cursor()
-    # insert into my_vectors(id,file_name,title,extracted_text,vectors)
-    for ind,content in enumerate(contents["data"]):
-        embedding_text = []
-        embedding_text.append(content["heading"])
-        embedding_text.append('\n')
-        for i in content["paragraphs"]:
-            embedding_text.append(i)
-        embedding_text.append('\n')
-        for j in content["table"]:
-            embedding_text.append(j)
-        embedding_text = " ".join([str(i) for i in embedding_text])
-        cleaned_text = embedding_text.replace("\'" , "")
-        sql_statement = cursor.execute("""
-                                        insert into ai.docs(file_name,title,extracted_text,vectors)
-                                        select :file_name file_name,:title title,:extracted_text extracted_text, TO_VECTOR(VECTOR_EMBEDDING(ALL_MINILM_L12_V2 USING :cleaned_text as data)) vectors
-                                        from dual
-                                    """,file_name=contents["file_name"],title=content["heading"],extracted_text=embedding_text,cleaned_text=cleaned_text)
-        print(sql_statement)
-        print("added")
+# def insert_paragraph_to_oracledb(contents):
+#     connection = oracledb.connect(user="ai", password="testtest",dsn="91.75.21.131:9522/FREEPDB1")
+#     cursor = connection.cursor()
+#     # insert into my_vectors(id,file_name,title,extracted_text,vectors)
+#     for ind,content in enumerate(contents["data"]):
+#         embedding_text = []
+#         embedding_text.append(content["heading"])
+#         embedding_text.append('\n')
+#         for i in content["paragraphs"]:
+#             embedding_text.append(i)
+#         embedding_text.append('\n')
+#         for j in content["table"]:
+#             embedding_text.append(j)
+#         embedding_text = " ".join([str(i) for i in embedding_text])
+#         cleaned_text = embedding_text.replace("\'" , "")
+#         sql_statement = cursor.execute("""
+#                                         insert into ai.docs(file_name,title,extracted_text,vectors)
+#                                         select :file_name file_name,:title title,:extracted_text extracted_text, TO_VECTOR(VECTOR_EMBEDDING(ALL_MINILM_L12_V2 USING :cleaned_text as data)) vectors
+#                                         from dual
+#                                     """,file_name=contents["file_name"],title=content["heading"],extracted_text=embedding_text,cleaned_text=cleaned_text)
+#         print(sql_statement)
+#         print("added")
 
-    connection.commit()
-    print("committed")
-    cursor.close()
-    connection.close()
-    st.sidebar.success("The file uploaded successfully!")
+    # connection.commit()
+    # print("committed")
+    # cursor.close()
+    # connection.close()
+    # st.sidebar.success("The file uploaded successfully!")
 # :sunglasses:
 
 st.title("🤖 Welcome in :blue[_fam_ _property_] ChatBot ")
