@@ -2,8 +2,16 @@
 import asyncio
 # import oracledb
 # import pdfplumber
+# import oracledb
+# import pdfplumber
 import streamlit as st
 
+# from tqdm import tqdm
+# from docx import Document 
+# from docx.table import Table
+# from docx.oxml.table import CT_Tbl
+# from docx.text.paragraph import Paragraph
+# from docx.oxml.text.paragraph import CT_P
 # from tqdm import tqdm
 # from docx import Document 
 # from docx.table import Table

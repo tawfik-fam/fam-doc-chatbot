@@ -140,7 +140,7 @@ prod_url = "http://91.75.21.130:3003"
     
 async def upload_file(file)-> str:
     # The URL endpoint
-    url = f"{dev_url}/chatbot/upload_file"
+    url = f"{prod_url}/chatbot/upload_file"
 
     # The payload to be sent with the POST request
     # print(file)
@@ -170,7 +170,7 @@ async def upload_file(file)-> str:
 
 async def chat(question):
     # The URL endpoint
-    url = f"{dev_url}/chatbot/chat"
+    url = f"{prod_url}/chatbot/chat"
 
     # The payload to be sent with the POST request
     payload = { 
@@ -197,7 +197,7 @@ async def chat(question):
 
 async def question_suggestion():
     # The URL endpoint
-    url = f"{dev_url}/chatbot/question_suggestion"
+    url = f"{prod_url}/chatbot/question_suggestion"
     
     # Making the POST request
     try:
