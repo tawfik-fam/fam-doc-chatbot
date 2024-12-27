@@ -18,7 +18,7 @@ import { Document } from "langchain/document";
 import * as fs from "node:fs";
 import * as path from "node:path";
 import fileUpload from "express-fileupload";
-import { ChatVertexAI } from "@langchain/google-vertexai";
+// import { ChatVertexAI } from "@langchain/google-vertexai";
 
 
 const routes = Router();
@@ -27,7 +27,7 @@ const openaiApiKey = process.env.OPENAI_API_KEY;
 
 if (openaiApiKey == null || openaiApiKey == undefined) {
   throw new Error(
-    "You need to provide an GOOGLE CLOUD TOKEN, here we read it from the GOOGLE_CLOUD_TOKEN environment variable"
+    "You need to provide an OPEN AI API KEY, here we read it from the OPENAI_API_KEY environment variable"
   );
 }
 
@@ -75,18 +75,23 @@ if (openaiApiKey == null || openaiApiKey == undefined) {
 // // },
   // verbose: true,
 // });
-const llm2 = new ChatVertexAI({
-  // modelName: "",
-  maxOutputTokens: 1024,
-  // projectId: projectId,
-  temperature: 0,
-  // apiKey:"AIzaSyCmsSJTxUcBFE0s8Y7F9951eV6GgdKCBPc",
-  // location:"us-central1",
-  verbose:true,
-  // endpoint: "https://us-central1-aiplatform.googleapis.com/v1/projects/famAI/locations/us-central1/publishers/meta/models/llama-3.1-405b-instruct-maas"
-});
+// const llm2 = new ChatVertexAI({
+//   // modelName: "",
+//   maxOutputTokens: 1024,
+//   // projectId: projectId,
+//   temperature: 0,
+//   // apiKey:"AIzaSyCmsSJTxUcBFE0s8Y7F9951eV6GgdKCBPc",
+//   // location:"us-central1",
+//   verbose:true,
+//   // endpoint: "https://us-central1-aiplatform.googleapis.com/v1/projects/famAI/locations/us-central1/publishers/meta/models/llama-3.1-405b-instruct-maas"
+// });
 // console.log(llm2.invoke("hi"));
 
+const llm2 = new ChatOpenAI({ 
+  model: "gpt-3.5-turbo", 
+  temperature: 0, 
+  apiKey: process.env.OPENAI_API_KEY,
+});
 
 var chain;
 var splits;
