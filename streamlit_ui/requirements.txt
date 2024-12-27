@@ -4,6 +4,6 @@ streamlit
 # semantic-router[local]==0.0.45
 # llama-index-llms-groq
 llama-index
-oracledb
-pdfplumber
-python-docx
+# oracledb
+# pdfplumber
+# python-docx

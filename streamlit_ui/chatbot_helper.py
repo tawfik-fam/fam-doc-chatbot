@@ -143,15 +143,15 @@ async def upload_file(file)-> str:
     url = f"{dev_url}/chatbot/upload_file"
 
     # The payload to be sent with the POST request
-    print(file)
+    # print(file)
     files = {
         'file': file
     }
     # Making the POST request
     try:
         response = requests.post(url,files=files)
-        print("hello")
-        print(response.text)
+        # print("hello")
+        # print(response.text)
 
         # Check if the request was successful
         if response.status_code == 200:
@@ -164,6 +164,7 @@ async def upload_file(file)-> str:
         return "Error: Unable to parse JSON response."
     except requests.Timeout:
         print("The request timed out. Please try again.")
+        return "The request timed out. Please try again."
     except requests.RequestException as e:
         print(f"An error occurred: {e}")
 
@@ -179,8 +180,8 @@ async def chat(question):
     # Making the POST request
     try:
         response = requests.post(url,data=payload)
-        print("hello")
-        print(response.text)
+        # print("hello")
+        # print(response.text)
 
         # Check if the request was successful
         return response
@@ -189,6 +190,7 @@ async def chat(question):
         return "Error: Unable to parse JSON response."
     except requests.Timeout:
         print("The request timed out. Please try again.")
+        return "The request timed out. Please try again."
     except requests.RequestException as e:
         print(f"An error occurred: {e}")
 
@@ -200,8 +202,8 @@ async def question_suggestion():
     # Making the POST request
     try:
         response = requests.get(url)
-        print("hello")
-        print(response.json())
+        # print("hello")
+        # print(response.json())
 
         # Check if the request was successful
         return response.json()

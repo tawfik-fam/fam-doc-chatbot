@@ -31,26 +31,26 @@ if (openaiApiKey == null || openaiApiKey == undefined) {
   );
 }
 
-const modelLocation = process.env.MODEL_LOCATION;
+// const modelLocation = process.env.MODEL_LOCATION;
 
-if (modelLocation == null || modelLocation == undefined) {
-  throw new Error(
-    "You need to provide an MODEL_LOCATION, here we read it from the MODEL_LOCATION environment variable"
-  );
-}
+// if (modelLocation == null || modelLocation == undefined) {
+//   throw new Error(
+//     "You need to provide an MODEL_LOCATION, here we read it from the MODEL_LOCATION environment variable"
+//   );
+// }
 
-const projectId = process.env.PROJECT_ID;
+// const projectId = process.env.PROJECT_ID;
 
-if (projectId == null || projectId == undefined) {
-  throw new Error(
-    "You need to provide an projectId, here we read it from the PROJECT_ID environment variable"
-  );
-}
+// if (projectId == null || projectId == undefined) {
+//   throw new Error(
+//     "You need to provide an projectId, here we read it from the PROJECT_ID environment variable"
+//   );
+// }
 
 // const llm2 = new ChatOpenAI({
 //   // modelName: "llama-3.1-405b-instruct-maas",
-//   temperature: 0,
-//   // apiKey: openaiApiKey,
+  // temperature: 0,
+  // apiKey: openaiApiKey,
 //   configuration:{
 //     fetch:fetch("https://us-central1-aiplatform.googleapis.com/v1/projects/famai-443316/locations/us-central1/endpoints/openapi/chat/completions?",),
 //     defaultQuery:{
@@ -73,13 +73,13 @@ if (projectId == null || projectId == undefined) {
 //     //     }
 //     // ]
 // // },
-//   verbose: true,
+  // verbose: true,
 // });
 const llm2 = new ChatVertexAI({
-  // modelName: "meta/llama-3.1-405b-instruct-maas",
-  // maxOutputTokens: 2048,
+  // modelName: "",
+  maxOutputTokens: 1024,
   // projectId: projectId,
-  // temperature: 0,
+  temperature: 0,
   // apiKey:"AIzaSyCmsSJTxUcBFE0s8Y7F9951eV6GgdKCBPc",
   // location:"us-central1",
   verbose:true,
@@ -227,17 +227,17 @@ async function initializeRetrievalChain(file, file_name) {
     separators: separators,
   });
   splits = await textSplitter.splitDocuments(docs);
-  console.log(
-    "/////////////////////////////////////////////////////////////////////////////////////////"
-  );
-  console.log(splits[0]);
-  console.log(
-    "/////////////////////////////////////////////////////////////////////////////////////////"
-  );
-  console.log(splits[1]);
-  console.log(
-    "/////////////////////////////////////////////////////////////////////////////////////////"
-  );
+  // console.log(
+  //   "/////////////////////////////////////////////////////////////////////////////////////////"
+  // );
+  // console.log(splits[0]);
+  // console.log(
+  //   "/////////////////////////////////////////////////////////////////////////////////////////"
+  // );
+  // console.log(splits[1]);
+  // console.log(
+  //   "/////////////////////////////////////////////////////////////////////////////////////////"
+  // );
 
   // connect with the table
 
@@ -248,7 +248,7 @@ async function initializeRetrievalChain(file, file_name) {
 
   const vector_store = await LanceDB.fromDocuments(
     splits,
-    new OpenAIEmbeddings(),
+    new OpenAIEmbeddings({apiKey:openaiApiKey}),
     { table: table }
   );
 

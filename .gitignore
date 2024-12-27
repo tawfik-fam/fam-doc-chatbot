@@ -4,6 +4,8 @@
 /node_modules
 /.pnp
 .pnp.js
+/git_commands.sh
+# /famai-443316-a82b98ba20b8.json
 
 # testing
 /coverage
