@@ -72,7 +72,8 @@ st.title("🤖 Welcome in :blue[_fam_ _property_] ChatBot ")
 if "messages" not in st.session_state:
     st.session_state.messages = [
         ChatMessage(role="system", content="")
-]        
+        ]
+
 prompt = st.chat_input("Ask a question?")
 # if len(st.session_state.messages) == 7:
 #     st.write("please sign in to fam property to complete conversation")
@@ -93,17 +94,18 @@ if uploaded_file is not None and prompt is None and "upload" in st.session_state
 #     for i in resp["questions"]:
 #         st.sidebar.button(label=i, on_click=generate_llm, args=[i])
 
-if prompt:
-    # Generate suggestion question only if no file uploaded or file is closed
+    if prompt:
+        # Generate suggestion question only if no file uploaded or file is closed
 
-    # Generate LLM response based on prompt
-    generate_llm(prompt)
+        # Generate LLM response based on prompt
+        generate_llm(prompt)
 
-for message in st.session_state.messages:
-    if message.role != "system":
-        with st.chat_message(message.role):
-            st.markdown(message.content)
-
+    for message in st.session_state.messages:
+        if message.role != "system":
+            with st.chat_message(message.role):
+                st.markdown(message.content)
+elif prompt is not None:
+    msg = st.toast('Please upload file first')
 
 # def extract_pdf(file):
 #     """Extracts paragraphs, headings, and tables from a PDF file and returns a list of dictionaries.

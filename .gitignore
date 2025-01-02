@@ -1,14 +1,16 @@
 # See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
 
 # dependencies
-/node_modules
+node_modules
 /.pnp
 .pnp.js
 /git_commands.sh
 # /famai-443316-a82b98ba20b8.json
-
+uploaded_files
+vectorStoreDB
 # testing
 /coverage
+__pycache__
 
 # production
 /build

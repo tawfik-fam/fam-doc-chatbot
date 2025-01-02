@@ -328,7 +328,7 @@ routes.use(
     uriDecodeFileNames: true,
     // Temporarily store uploaded files to disk, rather than buffering in memory
     useTempFiles: true,
-    tempFileDir: "./uploded_files/",
+    tempFileDir: "./uploaded_files/",
   })
 );
 
